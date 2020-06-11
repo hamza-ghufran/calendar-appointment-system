@@ -1,2 +1,4 @@
 /core/node_modules
 /core/package-lock.json
+/web/node_modules
+/web/package-lock.json
