@@ -4,6 +4,11 @@ module.exports = {
       obj[item[keyField]] = item;
       return obj;
     }, {}),
+  filterBookedSlots: (array1, array2) => {
+    return array1 = array1.filter(function (item) {
+      return !array2.includes(item);
+    })
+  },
   generateSlots: (data, cb) => {
     function addMinutes(start_time, interval) {
       var date = new Date(new Date('01/01/2019 ' + start_time).getTime() + interval * 60000);
@@ -24,12 +29,8 @@ module.exports = {
         timeslots.push(start_time);
       }
 
+      timeslots.pop()
       return cb(null, timeslots)
     }, 0)
   },
-  filterBookedSlots: (array1, array2) => {
-    return array1 = array1.filter(function (item) {
-      return !array2.includes(item);
-    })
-  }
 }

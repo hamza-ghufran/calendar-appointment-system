@@ -1,6 +1,6 @@
 const async = require('async');
-const Slot = require("./schema");
-const system_config = require('../../config')
+const Slot = require('../../utils/db').Slot;
+const systemConfig = require('../../config')
 const { arrayToObject, generateSlots, filterBookedSlots } = require('../../utils/helper')
 
 module.exports.list = function (data, _cb) {
@@ -9,18 +9,21 @@ module.exports.list = function (data, _cb) {
     list_booked_slots_for_the_day: (cb) => {
       let date = data.date
 
-      Slot.find({
-        date
-      })
-        .then((slots) => {
-          if (slots.length) {
+      Slot
+        .where('date', '==', date)
+        .get()
+        .then((docs) => {
+          if (!docs.empty) {
+            let slots = []
+            docs.forEach(doc => slots.push(doc.data()))
+
             return cb(null, { booked_slots: slots })
           }
 
           return cb(null, { code: 'NO_BOOKED_SLOTS_FOR_THE_DAY', booked_slots: [] })
         })
         .catch((err) => {
-
+          console.log(err)
           return cb({ cb: 'SLOT__LIST_ERROR', message: err })
         });
     },
@@ -28,7 +31,7 @@ module.exports.list = function (data, _cb) {
       let booked_slots = result.list_booked_slots_for_the_day.booked_slots
       let booked_slots_by_booked_time = arrayToObject(booked_slots, 'time');
 
-      generateSlots(system_config, (err, time_slots) => {
+      generateSlots(systemConfig, (err, time_slots) => {
         let free_slots = filterBookedSlots(time_slots, Object.keys(booked_slots_by_booked_time))
 
         return cb(null, { free_slots: free_slots })

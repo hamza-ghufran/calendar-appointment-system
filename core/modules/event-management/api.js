@@ -1,7 +1,7 @@
 const async = require('async');
-const Event = require("./schema");
+const Slot = require('../../utils/db').Slot;
+const Event = require('../../utils/db').Event;
 const validator = require('../../utils/validate')
-const Slot = require('../slot-management/schema');
 
 module.exports.add = function (data, _cb) {
 
@@ -21,12 +21,12 @@ module.exports.add = function (data, _cb) {
       let date = data.date
       let time = data.time
 
-      Event.find({
-        date: date,
-        time: time,
-      })
+      Event
+        .where('date', '==', date)
+        .where('time', '==', time)
+        .get()
         .then((event) => {
-          if (event.length) {
+          if (!event.empty) {
             return _cb(null, { code: 'EVENT_ALREADY_EXIST', message: `An event already exist at ${time} on ${date}` })
           }
 
@@ -37,35 +37,34 @@ module.exports.add = function (data, _cb) {
         });
     }],
     create_new_event: ['check_if_event_already_exist_at_the_time_date_specified', (result, cb) => {
-      new Event({
-        title: data.title,
-        time: data.time,
-        date: data.date,
-        subject: data.subject,
-        duration: data.duration,
-      })
-        .save()
+      Event
+        .add({
+          title: data.title,
+          time: data.time,
+          date: data.date,
+          subject: data.subject,
+          duration: data.duration,
+        })
         .then((event) => {
-          return cb(null, { event: event })
+          return cb(null, { event: event.id })
         })
         .catch(err => {
+          console.log(err)
           return cb({ code: 'EVENT__INSERT_ERROR', message: err })
         });
     }],
     book_slot_for_the_event: ['create_new_event', (result, cb) => {
-      let event = result.create_new_event.event
 
-      new Slot({
-        date: event.date,
-        time: event.time,
-        duration: event.duration,
-      })
-        .save()
-        .then((result) => {
+      Slot
+        .add({
+          date: data.date,
+          time: data.time,
+          duration: data.duration,
+        })
+        .then((slot) => {
           return cb(null)
         })
         .catch(err => {
-          console.log(err)
           return cb({ code: 'SLOT__INSERT_ERROR', message: err })
         })
     }]
@@ -83,14 +82,15 @@ module.exports.list = function (data, cb) {
   let start_date = data.start_date
   let end_date = data.end_date
 
-  Event.find({
-    date: {
-      '$gte': start_date,
-      '$lte': end_date
-    }
-  })
-    .then((events) => {
-      if (events.length) {
+  Event
+    .where('date', '>=', start_date)
+    .where('date', '<=', end_date)
+    .get()
+    .then((docs) => {
+      if (!docs.empty) {
+        let events = []
+        docs.forEach(doc => events.push(doc.data()))
+
         return cb(null, { code: 'LIST_EVENT_FETCHED', data: events })
       }
 

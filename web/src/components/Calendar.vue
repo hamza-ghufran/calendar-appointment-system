@@ -41,8 +41,7 @@ export default {
       let new_slot = sources.slots;
       new_slot.extraParams.date = arg.dateStr;
       this.$refs.fullCalendar.eventSources.push(new_slot);
-    },
-    refreshEvents() {}
+    }
   },
   data() {
     return {

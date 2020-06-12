@@ -24,18 +24,10 @@ export default {
   },
   data() {
     return {
-      events: [
-        {
-          title: "event1",
-          start: "2020-06-09",
-          cssClass: "blue",
-          YOUR_DATA: {}
-        }
-      ]
+      events: []
     };
   },
-  created() {
-  }
+  created() {}
 };
 </script>
 
