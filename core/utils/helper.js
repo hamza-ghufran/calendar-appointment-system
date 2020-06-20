@@ -24,7 +24,7 @@ module.exports = {
       let { start_time, end_time, duration } = data
       let timeslots = [start_time]
 
-      while (start_time != end_time) {
+      while (start_time <= end_time) {
         start_time = addMinutes(start_time, duration)
         timeslots.push(start_time);
       }

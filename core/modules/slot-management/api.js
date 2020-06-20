@@ -4,6 +4,7 @@ const systemConfig = require('../../config')
 const { arrayToObject, generateSlots, filterBookedSlots } = require('../../utils/helper')
 
 module.exports.list = function (data, _cb) {
+  systemConfig.duration = data.duration;
 
   async.auto({
     list_booked_slots_for_the_day: (cb) => {

@@ -4,19 +4,20 @@ Content-Type: application/json
 
 {
   "title":"new Event",
-  "time":"10:30",
-  "duration":"30",
+  "time":"13:30",
+  "duration":"40",
   "subject":"Something",
   "date":"2020-11-09T00:00:00Z"
 }
 
 ###
 
-POST http://localhost:3002/slot/list
+POST http://localhost:3002/slot/list HTTP/1.1
 Content-Type: application/json
 
 {
-  "date":"2020-12-09T00:00:00Z"
+  "duration":"40",
+  "date":"2020-11-09T00:00:00Z"
 }
 
 ###

@@ -7,12 +7,7 @@
       <date-picker :placeholder="'Date'" v-model="event.date" />
     </div>
     <div class="input-holder">
-      <vue-timepicker
-        :placeholder="'Time'"
-        :minute-interval="30"
-        v-model="event.time"
-        format="HH:mm"
-      ></vue-timepicker>
+      <vue-timepicker :placeholder="'Time'" v-model="event.time" format="HH:mm"></vue-timepicker>
     </div>
     <div class="input-holder">
       <textarea type="text" placeholder="Subject" rows="4" v-model="event.subject"></textarea>
@@ -25,19 +20,23 @@
 
 
 <script>
+import moment from "moment";
 import DatePicker from "vuejs-datepicker";
 import VueTimepicker from "vue2-timepicker";
-import moment from "moment";
 
 export default {
   name: "EventForm",
+  props: ["selected_event"],
   data() {
     return {
       event: {
         title: "",
-        start: "",
-        time: "00:30",
-        duration: "30",
+        start:
+          this.selected_event &&
+          moment(this.selected_event.start).format("YYYY-MM-DD"),
+        time:
+          this.selected_event && new Date(this.selected_event.start).getHours(),
+        duration: "",
         cssClass: "",
         subject: ""
       }
