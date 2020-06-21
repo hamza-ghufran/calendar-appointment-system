@@ -18,11 +18,11 @@ module.exports = {
     if (!booked_slots.length) return generated_slots
 
     booked_slots.forEach(slot => {
+      let booked_slot_from = moment(slot.from, "HH:mm")
+      let booked_slot_to = moment(slot.to, "HH:mm")
+
       generated_slots.forEach(element => {
         let flag = true
-
-        let booked_slot_from = moment(slot.from, "HH:mm")
-        let booked_slot_to = moment(slot.to, "HH:mm")
         let generated_slot_from = moment(element.from, "HH:mm")
         let generated_slot_to = moment(element.to, "HH:mm")
 
@@ -63,48 +63,3 @@ module.exports = {
   }
 }
 module.exports.addInterval = addInterval
-
-
-
-
-
-
-// generated_slots.forEach(generated_slot => {
-//   let flag = true
-
-//   booked_slots.forEach(booked_slot => {
-//     let generated_slot_in_hours = moment(generated_slot, "HH")
-//     let generated_slot_in_min = moment(generated_slot, "HH:mm")
-//     let booked_slot_in_hours = moment(booked_slot, "HH")
-//     let booked_slot_in_min = moment(booked_slot, "HH:mm")
-
-//     let diff_hours = generated_slot_in_hours.diff(booked_slot_in_hours, 'hours')
-//     let diff_mins = moment.utc(generated_slot_in_min.diff(booked_slot_in_min)).format("mm")
-
-//     if (Math.abs(diff_hours * 60) > interval) return
-//     if (diff_mins < interval) flag = false
-//   })
-
-//   flag && final_slot.push(generated_slot)
-// })
-// let booked_slots = [
-//   {
-//     date: '2020-06-12',
-//     from: '13:30',
-//     to: '14:10',
-//     duration: '40'
-//   }
-// ]
-
-// generated_slot.forEach(element => {
-//   let flag = true
-//   book_slots.forEach(slot => {
-
-//     if (slot.from > element.from) {
-//       if (slot.from < element.to) {
-//         flag = false
-//       }
-//     }
-//   })
-//   flag && final_slot.push()
-// })

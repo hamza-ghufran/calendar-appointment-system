@@ -5,16 +5,19 @@
     </div>
     <div class="input-holder">
       <date-picker :placeholder="'Date'" v-model="event.date" />
-      <input
-        class="input-number"
-        type="select"
-        @input="handleSelectDuration"
-        placeholder="Duration"
-        v-model="event.duration"
-      />
     </div>
-    <div class="input-select">
-      <v-select :placeholder="'Slot'" :options="options" v-model="event.time"></v-select>
+    <div class="grid">
+      <div class="input-select">
+        <v-select
+          :placeholder="'Duration (min)'"
+          :options="duration_list"
+          v-model="event.duration"
+          @input="handleSelectDuration"
+        ></v-select>
+      </div>
+      <div class="input-select">
+        <v-select :placeholder="'Slot'" :options="options" v-model="event.time"></v-select>
+      </div>
     </div>
     <div class="input-holder">
       <textarea type="text" placeholder="Subject" rows="4" v-model="event.subject"></textarea>
@@ -44,7 +47,8 @@ export default {
         cssClass: "",
         subject: ""
       },
-      options: []
+      options: [],
+      duration_list: ["10", "20", "30", "40", "50", "60"]
     };
   },
   methods: {
@@ -133,6 +137,11 @@ form {
   margin-right: 90px;
 }
 
+.grid {
+  display: inline-flex;
+  margin-left: -8px;
+}
+
 .input-holder > button {
   justify-self: center;
   padding: 12px 25px;
@@ -148,9 +157,9 @@ form {
 }
 
 .input-select {
-  margin: 10px 0;
-  width: 322px;
-  font-weight: 600;
+  margin: 8px;
+  width: 36%;
+  color: grey;
 }
 
 input,
