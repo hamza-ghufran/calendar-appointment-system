@@ -31,11 +31,8 @@ export default {
     return {
       event: {
         title: "",
-        start:
-          this.selected_event &&
-          moment(this.selected_event.start).format("YYYY-MM-DD"),
-        time:
-          this.selected_event && new Date(this.selected_event.start).getHours(),
+        start: "",
+        time: "",
         duration: "",
         cssClass: "",
         subject: ""

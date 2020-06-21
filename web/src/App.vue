@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      sources: [],
+      sources: [api.events],
       duration: 0,
       selected_event: {}
     };

@@ -4,10 +4,22 @@ module.exports = {
       obj[item[keyField]] = item;
       return obj;
     }, {}),
-  filterBookedSlots: (array1, array2) => {
-    return array1 = array1.filter(function (item) {
-      return !array2.includes(item);
-    })
+  filterBookedSlots: (generated_slots, booked_slots, interval) => {
+    if (!booked_slots.length) return generated_slots
+    let final_slots = []
+
+    generated_slots.forEach(element => {
+      booked_slots.forEach(slot => {
+
+        if (slot.split(':')[0] == element.split(':')[0]) {
+          if (Math.abs(slot.split(':')[1] - element.split(':')[1]) < interval) return
+          final_slots.push(element)
+        }
+
+        else final_slots.push(element)
+      })
+    });
+    return final_slots
   },
   generateSlots: (data, cb) => {
     function addMinutes(start_time, interval) {

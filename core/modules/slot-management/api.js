@@ -33,7 +33,7 @@ module.exports.list = function (data, _cb) {
       let booked_slots_by_booked_time = arrayToObject(booked_slots, 'time');
 
       generateSlots(systemConfig, (err, time_slots) => {
-        let free_slots = filterBookedSlots(time_slots, Object.keys(booked_slots_by_booked_time))
+        let free_slots = filterBookedSlots(time_slots, Object.keys(booked_slots_by_booked_time), data.duration)
 
         return cb(null, { free_slots: free_slots })
       })
@@ -52,5 +52,3 @@ module.exports.list = function (data, _cb) {
     })
   })
 }
-
-
