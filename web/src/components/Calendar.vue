@@ -13,8 +13,6 @@
     :editable="true"
     :plugins="calendarPlugins"
     :weekends="calendarWeekends"
-    @eventClick="eventClick"
-    @dateClick="handleDateClick"
   />
 </template>
 <script>
@@ -30,12 +28,6 @@ export default {
     FullCalendar
   },
   methods: {
-    handleDateClick: function(arg) {
-      this.$emit("dateClick", arg);
-    },
-    eventClick(event) {
-      this.$emit('eventClick', event)
-    }
   },
   data() {
     return {
@@ -46,8 +38,6 @@ export default {
   }
 };
 </script>
-
-
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>

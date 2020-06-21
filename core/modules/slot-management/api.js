@@ -28,15 +28,21 @@ module.exports.list = function (data, _cb) {
           return cb({ cb: 'SLOT__LIST_ERROR', message: err })
         });
     },
-    generate_free_slots_for_the_day: ['list_booked_slots_for_the_day', (result, cb) => {
+    generate_slots_by_duration_for_the_day: ['list_booked_slots_for_the_day', (result, cb) => {
+      generateSlots(systemConfig)
+        .then((free_slots) => {
+          return cb(null, { free_slots: free_slots })
+        })
+    }],
+    filter_booked_slots: ['generate_slots_by_duration_for_the_day', (result, cb) => {
+      let free_slots = result.generate_slots_by_duration_for_the_day.free_slots
       let booked_slots = result.list_booked_slots_for_the_day.booked_slots
-      let booked_slots_by_booked_time = arrayToObject(booked_slots, 'time');
 
-      generateSlots(systemConfig, (err, time_slots) => {
-        let free_slots = filterBookedSlots(time_slots, Object.keys(booked_slots_by_booked_time), data.duration)
+      let final_slot_list = filterBookedSlots(free_slots, booked_slots)
 
-        return cb(null, { free_slots: free_slots })
-      })
+      final_slot_list = arrayToObject(final_slot_list, 'from')
+
+      return cb(null, { free_slots: Object.keys(final_slot_list) })
     }]
   }, function (error, results) {
     if (error) {
@@ -46,7 +52,7 @@ module.exports.list = function (data, _cb) {
     return _cb(null, {
       code: 'LIST_SLOT_SUCCESS',
       data: {
-        free_slots: results.generate_free_slots_for_the_day.free_slots,
+        free_slots: results.filter_booked_slots.free_slots,
         date: data.date
       }
     })

@@ -2,15 +2,11 @@
   <div id="app">
     <div class="main">
       <div class="calendar-holder">
-        <calendar
-          v-bind:sources="sources"
-          @dateClick="handleDateClick"
-          @eventClick="handleEventClick"
-        />
+        <calendar v-bind:sources="sources" />
       </div>
       <div class="form-holder">
         <h3>Schedule an event</h3>
-        <event-form />
+        <event-form @refectEvents="refectEvents" />
       </div>
     </div>
   </div>
@@ -28,20 +24,26 @@ export default {
     EventForm
   },
   methods: {
-  
+    refectEvents() {
+      this.sources.pop();
+
+      let events = api.events;
+      events.id = this.id++;
+      this.sources.push(events);
+    }
   },
   data() {
     return {
       sources: [api.events],
       duration: 0,
-      selected_event: {}
+      selected_event: {},
+      id: 1
     };
   }
 };
 
 var api = {
   events: {
-    id: 1,
     url: "http://localhost:3002/event/list",
     method: "POST",
     extraParams: {
@@ -95,6 +97,7 @@ var api = {
   color: #2c3e50;
   margin-top: 60px;
 }
+
 .main {
   display: flex;
   align-items: center;

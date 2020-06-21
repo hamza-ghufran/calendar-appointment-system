@@ -5,16 +5,15 @@
     </div>
     <div class="input-holder">
       <date-picker :placeholder="'Date'" v-model="event.date" />
-    </div>
-    <div class="input-holder">
       <input
-        type="number"
+        class="input-number"
+        type="select"
         @input="handleSelectDuration"
         placeholder="Duration"
         v-model="event.duration"
       />
     </div>
-    <div class="input-holder">
+    <div class="input-select">
       <v-select :placeholder="'Slot'" :options="options" v-model="event.time"></v-select>
     </div>
     <div class="input-holder">
@@ -34,6 +33,7 @@ import VueTimepicker from "vue2-timepicker";
 
 export default {
   name: "EventForm",
+  props: ["refectEvents"],
   data() {
     return {
       event: {
@@ -48,20 +48,22 @@ export default {
     };
   },
   methods: {
-    async handleSubmit() {
+    handleSubmit() {
       const date = moment(this.event.date).format("YYYY-MM-DD");
       const event = {
         ...this.event,
         date
       };
-      const req = await fetch("http://localhost:3002/event/add", {
+      fetch("http://localhost:3002/event/add", {
         method: "POST",
         body: JSON.stringify(event),
         headers: {
           "content-type": "application/json"
         }
+      }).finally(() => {
+        this.$emit("refectEvents");
       });
-      await req.json();
+
       this.resetValues();
     },
     handleSelectDuration(arg) {
@@ -126,6 +128,11 @@ form {
   width: 100%;
 }
 
+.input-number {
+  margin-left: -25px;
+  margin-right: 90px;
+}
+
 .input-holder > button {
   justify-self: center;
   padding: 12px 25px;
@@ -138,6 +145,12 @@ form {
   font-size: 14px;
   letter-spacing: -0.1px;
   cursor: pointer;
+}
+
+.input-select {
+  margin: 10px 0;
+  width: 322px;
+  font-weight: 600;
 }
 
 input,

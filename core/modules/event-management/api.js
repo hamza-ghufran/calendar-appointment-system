@@ -1,7 +1,9 @@
 const async = require('async');
+const moment = require('moment')
 const Slot = require('../../utils/db').Slot;
 const Event = require('../../utils/db').Event;
 const validator = require('../../utils/validate')
+const addInterval = require('../../utils/helper').addInterval
 
 module.exports.add = function (data, _cb) {
 
@@ -58,7 +60,8 @@ module.exports.add = function (data, _cb) {
       Slot
         .add({
           date: data.date,
-          time: data.time,
+          from: data.time,
+          to: addInterval({ time: data.time, duration: data.duration }),
           duration: data.duration,
         })
         .then((slot) => {

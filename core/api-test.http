@@ -7,7 +7,7 @@ Content-Type: application/json
   "time":"13:30",
   "duration":"40",
   "subject":"Something",
-  "date":"2020-06-12T00:00:00Z"
+  "date":"2020-06-12"
 }
 
 ###
@@ -16,8 +16,8 @@ POST http://localhost:3002/slot/list HTTP/1.1
 Content-Type: application/json
 
 {
-  "duration":"30",
-  "date":"2020-06-12T00:00:00Z"
+  "duration":"40",
+  "date":"2020-06-12"
 }
 
 ###
