@@ -9,10 +9,8 @@
         />
       </div>
       <div class="form-holder">
-        <h3>Set Duration</h3>
-        <duration-form @input="handleDuration" />
         <h3>Schedule an event</h3>
-        <event-form v-bind:selected_event="selected_event" />
+        <event-form />
       </div>
     </div>
   </div>
@@ -22,35 +20,15 @@
 import moment from "moment";
 import Calendar from "./components/Calendar.vue";
 import EventForm from "./components/EventForm.vue";
-import DurationForm from "./components/DurationForm.vue";
 
 export default {
   name: "app",
   components: {
     Calendar,
-    EventForm,
-    DurationForm
+    EventForm
   },
   methods: {
-    handleDuration(value) {
-      this.duration = value;
-    },
-    handleDateClick(arg) {
-      function isSlot(event) {
-        return event.name === "slots";
-      }
-
-      if (this.sources.find(isSlot)) {
-        this.sources.pop();
-      }
-      let new_slot = api.slots;
-      new_slot.extraParams.date = arg.dateStr;
-      new_slot.extraParams.duration = this.duration;
-      this.sources.push(new_slot);
-    },
-    handleEventClick(event) {
-      this.selected_event = event.event;
-    }
+  
   },
   data() {
     return {

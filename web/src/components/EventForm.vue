@@ -7,7 +7,15 @@
       <date-picker :placeholder="'Date'" v-model="event.date" />
     </div>
     <div class="input-holder">
-      <vue-timepicker :placeholder="'Time'" v-model="event.time" format="HH:mm"></vue-timepicker>
+      <input
+        type="number"
+        @input="handleSelectDuration"
+        placeholder="Duration"
+        v-model="event.duration"
+      />
+    </div>
+    <div class="input-holder">
+      <v-select :placeholder="'Slot'" :options="options" v-model="event.time"></v-select>
     </div>
     <div class="input-holder">
       <textarea type="text" placeholder="Subject" rows="4" v-model="event.subject"></textarea>
@@ -26,7 +34,6 @@ import VueTimepicker from "vue2-timepicker";
 
 export default {
   name: "EventForm",
-  props: ["selected_event"],
   data() {
     return {
       event: {
@@ -36,7 +43,8 @@ export default {
         duration: "",
         cssClass: "",
         subject: ""
-      }
+      },
+      options: []
     };
   },
   methods: {
@@ -56,13 +64,32 @@ export default {
       await req.json();
       this.resetValues();
     },
+    handleSelectDuration(arg) {
+      const date = moment(this.event.date).format("YYYY-MM-DD");
+      const params = {
+        date,
+        duration: this.event.duration
+      };
+      fetch("http://localhost:3002/slot/list", {
+        method: "POST",
+        body: JSON.stringify(params),
+        headers: {
+          "content-type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(res => {
+          let free_slots = res.data.free_slots;
+          this.options = free_slots;
+        });
+    },
     resetValues() {
       this.event = {
         title: "",
         start: "",
         time: "00:30",
         end: "",
-        duration: "30",
+        duration: "",
         cssClass: "",
         subject: ""
       };
