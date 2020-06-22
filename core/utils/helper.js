@@ -17,18 +17,18 @@ module.exports = {
     let final_slot = []
     if (!booked_slots.length) return generated_slots
 
-    booked_slots.forEach(slot => {
-      let booked_slot_from = moment(slot.from, "HH:mm")
-      let booked_slot_to = moment(slot.to, "HH:mm")
+    generated_slots.forEach(element => {
 
-      generated_slots.forEach(element => {
-        let flag = true
+      let flag = true
+      booked_slots.forEach(slot => {
+        let booked_slot_from = moment(slot.from, "HH:mm")
+        let booked_slot_to = moment(slot.to, "HH:mm")
         let generated_slot_from = moment(element.from, "HH:mm")
         let generated_slot_to = moment(element.to, "HH:mm")
 
 
         if (booked_slot_from >= generated_slot_from) {
-          if (booked_slot_from < generated_slot_to) {
+          if (booked_slot_from <= generated_slot_to) {
             flag = false
           }
         }
@@ -38,9 +38,9 @@ module.exports = {
             flag = false
           }
         }
-
-        flag && final_slot.push(element)
       })
+
+      flag && final_slot.push(element)
     })
 
     return final_slot
@@ -49,7 +49,7 @@ module.exports = {
     let { start_time, end_time, duration } = data
     let slot_array = []
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         while (start_time < end_time) {
           let to = addInterval({ time: start_time, duration: duration })
