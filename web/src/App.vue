@@ -17,6 +17,12 @@ import moment from "moment";
 import Calendar from "./components/Calendar.vue";
 import EventForm from "./components/EventForm.vue";
 
+function addInterval(data) {
+  let time_string = moment(data.start).add(data.duration, "minutes");
+
+  return moment(time_string).format("YYYY-MM-DD HH:mm");
+}
+
 export default {
   name: "app",
   components: {
@@ -54,33 +60,17 @@ var api = {
       let events = res.data;
 
       return events.map(event => {
+        let start = moment(
+          event.date + " " + event.time,
+          "YYYY-MM-DD HH:mm"
+        ).format("YYYY-MM-DD HH:mm");
+        let end = addInterval({ start: start, duration: event.duration });
+
         return {
           title: event.title,
-          start: moment(
-            event.date + " " + event.time,
-            "YYYY-MM-DD HH:mm"
-          ).format("YYYY-MM-DD HH:mm"),
+          start: start,
+          end: end,
           description: event.subject
-        };
-      });
-    }
-  },
-  slots: {
-    name: "slots",
-    url: "http://localhost:3002/slot/list",
-    method: "POST",
-    extraParams: {},
-    color: "green",
-    success: function(res) {
-      let free_slots = res.data.free_slots;
-      let date = res.data.date;
-
-      return free_slots.map(slot => {
-        return {
-          title: "Free",
-          start: moment(date + " " + slot, "YYYY-MM-DD HH:mm").format(
-            "YYYY-MM-DD HH:mm"
-          )
         };
       });
     }

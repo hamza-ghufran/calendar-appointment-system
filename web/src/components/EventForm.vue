@@ -23,7 +23,7 @@
       <textarea type="text" placeholder="Subject" rows="4" v-model="event.subject"></textarea>
     </div>
     <div class="input-holder">
-      <button type="submit">Create Event</button>
+      <button :disabled="isDisabled" type="submit">Create Event</button>
     </div>
   </form>
 </template>
@@ -50,6 +50,11 @@ export default {
       options: [],
       duration_list: ["10", "20", "30", "40", "50", "60"]
     };
+  },
+  computed: {
+    isDisabled() {
+      return !(this.event.time && this.event.duration && this.event.date);
+    }
   },
   methods: {
     handleSubmit() {
@@ -93,7 +98,7 @@ export default {
       this.event = {
         title: "",
         start: "",
-        time: "00:30",
+        time: "",
         end: "",
         duration: "",
         cssClass: "",
@@ -154,6 +159,9 @@ form {
   font-size: 14px;
   letter-spacing: -0.1px;
   cursor: pointer;
+}
+.input-holder > button:disabled {
+  background: rgb(136, 136, 136);
 }
 
 .input-select {

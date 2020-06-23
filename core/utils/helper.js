@@ -28,7 +28,7 @@ module.exports = {
 
 
         if (booked_slot_from >= generated_slot_from) {
-          if (booked_slot_from <= generated_slot_to) {
+          if (booked_slot_from < generated_slot_to) {
             flag = false
           }
         }
@@ -39,7 +39,7 @@ module.exports = {
           }
         }
       })
-
+      
       flag && final_slot.push(element)
     })
 
