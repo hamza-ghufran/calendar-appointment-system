@@ -4,7 +4,7 @@
       <input type="text" placeholder="Event title" v-model="event.title" />
     </div>
     <div class="input-holder">
-      <date-picker :placeholder="'Date'" v-model="event.date" />
+      <date-picker :placeholder="'Date'" v-model="event.date" @input="handleSelectDate" />
     </div>
     <div class="grid">
       <div class="input-select">
@@ -93,6 +93,11 @@ export default {
           let free_slots = res.data.free_slots;
           this.options = free_slots;
         });
+    },
+    handleSelectDate() {
+      this.event.duration = "";
+      this.event.time = "";
+      this.options = "";
     },
     resetValues() {
       this.event = {
